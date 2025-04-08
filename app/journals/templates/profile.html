@@ -1,0 +1,24 @@
+{% extends 'base_content.html' %}
+{% block content %}
+{% load static %}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1>Edit profile</h1>
+      <form action="{% url 'profile' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include 'partials/bootstrap_form.html' with form=form %} 
+        Profile Picture: <br/>
+        {% if user.profile.profile_image %}
+        <img src="{{ user.profile.profile_image.url }}" class="rounded-circle" height="100" width="100">
+        {% else %}
+        <img src="{% static 'image/default_profile_image.png' %}" class="rounded-circle" height="100" width="100">
+        {% endif %}
+        <input type="file" name="profile_image" accept="image/png, image/gif, image/jpeg" />
+        <br/> <br/>
+        <input type="submit" value="Update" class="btn btn-primary">
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

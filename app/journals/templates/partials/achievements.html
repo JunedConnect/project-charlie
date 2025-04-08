@@ -1,0 +1,10 @@
+<div>
+    <h2>Achievements Unlocked:</h2>
+    <ul>
+      {% for achievement in achievements %}
+        <li>{{ achievement.name }} - {{ achievement.description }}</li>
+      {% empty %}
+        <li>No achievements unlocked yet.</li>
+      {% endfor %}
+    </ul>
+  </div>

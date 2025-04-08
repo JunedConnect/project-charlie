@@ -1,0 +1,52 @@
+{% extends "base_content.html" %}
+{% block content %}
+<div class="container my-4">
+    <h2>{{ entry.entry_name }}</h2>
+    <div>
+        {% if entry.mood %}
+        <div class="mb-3">
+            <strong>Mood:</strong>
+            <p>{{ entry.mood }}</p>
+        </div>
+        {% endif %}
+        
+        {% for question, response in questions_and_responses %}
+            <div class="mb-3">
+                <strong>{{ question }}</strong>
+                <p>{{ response|default:"No response provided" }}</p>
+            </div>
+        {% endfor %}
+
+        <strong>Multimedia file:</strong>
+
+        {% if entry.multimedia_file %}  
+            {% if entry.multimedia_file.url|lower|slice:'-3:' == 'mp4' %}
+            <details>
+                <summary>Click here to view video</summary>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <video width="100%" controls>
+                            <source src="{{ entry.multimedia_file.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </details>
+            {% else %}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <img src="{{ entry.multimedia_file.url }}" alt="Multimedia File" class="img-fluid">
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <p>No multimedia file uploaded</p>
+        {% endif %}
+
+        <a href="{% url 'edit_entry' journal.id entry.id %}" class="btn btn-info">Edit Entry</a>
+        <a href="{% url 'download_entry_pdf' journal.id entry.id %}" class="btn btn-info">Download as PDF</a>
+        <a href="{% url 'view_journal_entries' journal.id %}" class="btn btn-info">Back to Journal</a>
+        
+    </div>
+</div>
+{% endblock %}

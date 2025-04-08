@@ -1,0 +1,40 @@
+{% extends "base_content.html" %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="cover-card-title h1">{{journal.name}}, entries : ({{ entry_list|length }}), Streak: {{ journal.get_streak }}</div>
+            <form action="{% url 'view_journal_entries' journal.id%}" method="post">
+            {% include "partials/search_filter.html" with form=form%}
+            </form>
+            <a href="{% url 'create_entry' journal.id%}" class="btn btn-primary btn-lg">Add Entry</a>
+            
+        </div>
+        {% block create_journal_block %}
+        {% endblock %}
+        {% if entry_list|length == 0 %}
+            <div class="text-center mt-5"><p class="lead display-3">No entries found</p></div>
+        {% else %}
+            <div class="row mt-2">
+                {% for entry in entry_list %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card border-primary" style="background-color: rgba(245,245,245,0.6)">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ entry.date }}</h5>
+                                <h5 class="card-title">{{ entry.entry_name }}</h5>
+                                <div class="d-flex justify-content-between">
+                                    <a href="{% url 'edit_entry' journal.id entry.id %}" class="btn btn-success">Edit</a>
+                                    <a href="{% url 'view_entry' journal.id entry.id %}" class="btn btn-primary">View</a>
+                                    <form action="{% url 'delete_entry' entry.id %}" method="post" class="d-inline">
+
+                                        {% csrf_token %}
+                                
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this journal entry?')">Delete Entry</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+[
+    {
+      "model": "journals.journal",
+      "id": 3,
+      "fields": {     
+        "name": "Default Journal",
+        "owner": 2,
+        "template": 0,
+        "date": "2024-02-22"
+      }
+    }
+]

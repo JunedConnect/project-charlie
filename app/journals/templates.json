@@ -1,0 +1,19 @@
+[
+  {
+    "template_name": "Base Template",
+    "questions": [
+      "What did you do today?",
+      "rate your day on a scale of 1-10"
+    ]
+  },
+  {
+    "template_name": "Blank Template",
+    "questions": [
+      "Entry Content"
+    ]
+  },
+  {
+    "template_name": "Custom Template",
+    "questions": []
+  }
+]

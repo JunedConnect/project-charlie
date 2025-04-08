@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block body %}
+  <div class="container vh-100 d-flex justify-content-center align-items-center">
+    <div class="card" style="max-width: 400px; border: 3px solid white;">
+      <div class="card-body">
+        <h1 class="cover-heading text-center">Digital Journal</h1>
+        <p class="cover-text text-center">A digital journaling application by Team Violet</p>
+        <div class="text-center">
+          <a href='{% url 'sign_up' %}' class="btn btn-lg btn-secondary">Sign up</a>
+          <a href='{% url 'log_in' %}' class="btn btn-lg btn-secondary">Log in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

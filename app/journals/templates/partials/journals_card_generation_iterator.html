@@ -1,0 +1,8 @@
+{% if journal_list|length == 0 %}
+    <div class="text-center mt-5"><p class="lead display-3">{{ no_journals_message }}</p></div>
+{% else %}
+    {% for journal in journal_list %}
+        {% block journal_card %}
+        {% endblock %}
+    {% endfor %}
+{% endif %}

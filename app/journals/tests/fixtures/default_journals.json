@@ -1,0 +1,53 @@
+[
+    {
+      "model": "journals.journal",
+      "id": 1,
+      "fields": {     
+        "name": "Default Journal",
+        "owner": 1,
+        "template": 0,
+        "date": "2024-02-22"
+      }
+    },
+    {
+      "model": "journals.journal",
+      "id": 2,
+      "fields": {     
+        "name": "Second Journal",
+        "owner": 1,
+        "template": 0,
+        "date": "2024-02-22"
+      }
+    },
+    {
+      "model": "journals.journal",
+      "id": 3,
+      "fields": {     
+        "name": "Third Journal",
+        "owner": 1,
+        "template": 0,
+        "date": "2024-02-22"
+      }
+    },
+    {
+      "model": "journals.journal",
+      "id": 4,
+      "fields": {     
+        "name": "Fourth Journal",
+        "owner": 1,
+        "template": 0,
+        "date": "2024-02-22"
+      }
+    },
+    {
+      "model": "journals.journal",
+      "id": 5,
+      "fields": {     
+        "name": "Fifth Journal",
+        "owner": 1,
+        "template": 0,
+        "date": "2024-02-22"
+      }
+    }
+]
+  

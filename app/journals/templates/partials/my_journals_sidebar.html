@@ -1,0 +1,25 @@
+{% if user.is_authenticated %}
+<div class="flex-shrink-0 p-3" style=" background-color:rgba(0,0,0,0); color: white;">
+    <a href="{% url "journals_home"%}" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom" style="color: white;">
+      <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+      <span class="fs-5 fw-semibold">My journals</span>
+    </a>
+    <ul class="list-unstyled ps-0">
+    {% for journal in request.user.get_associated_journals %}
+      <li class="mb-1">
+        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#{{journal.get_name_without_whitespace}}-collapse" aria-expanded="false" style="color: white;">
+          {{ journal.name }}
+        </button>
+        <div class="collapse" id="{{journal.get_name_without_whitespace}}-collapse" style="">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            {% for entry in journal.get_entries %}
+                <li><a href="{% url 'view_entry' journal.id entry.id %}" class="link-dark rounded" style="color: white; text-decoration: none;">{{ entry.entry_name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+</div>
+
+{% endif %}
