@@ -1,10 +1,22 @@
+# ---------- Stage 1 ----------
+FROM python:3.8-slim AS builder
+
+WORKDIR /install
+
+# Install dependencies separately to make use of Docker cache
+COPY app/requirements.txt .
+RUN pip install --upgrade pip && pip install --prefix=/install --no-cache-dir -r requirements.txt
+
+# --------- Stage 2 ----------
 FROM python:3.8-slim
 
 WORKDIR /app
 
-COPY . .
+# Copy only installed packages from Stage 1
+COPY --from=builder /install /usr/local
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the app code
+COPY app/ .
 
 # Apply model changes to the database before starting the server
 CMD ["sh", "-c", "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py startserver 0.0.0.0:5000"]
