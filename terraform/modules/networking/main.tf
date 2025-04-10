@@ -1,7 +1,7 @@
 resource "aws_vpc" "charlie-prod-vpc" {
-  cidr_block = var.cidr_block
+  cidr_block           = var.cidr_block
   enable_dns_hostnames = true
-  enable_dns_support = true
+  enable_dns_support   = true
   tags = {
     "Name" = "${var.team_name}-VPC"
   }
@@ -15,9 +15,9 @@ resource "aws_internet_gateway" "charlie-prod-vpc-igw" {
 }
 
 resource "aws_subnet" "charlie-prod_public_subnets" {
-  for_each = { for idx, cidr in var.public_subnets : idx => cidr }
-  vpc_id = aws_vpc.charlie-prod-vpc.id
-  cidr_block = each.value
+  for_each                = { for idx, cidr in var.public_subnets : idx => cidr }
+  vpc_id                  = aws_vpc.charlie-prod-vpc.id
+  cidr_block              = each.value
   map_public_ip_on_launch = true
   tags = {
     "Name" = "public-subnet-${each.key}"
@@ -33,7 +33,24 @@ resource "aws_route_table" "charlie-prod_rt" {
 }
 
 resource "aws_route_table_association" "charlie-prod_rt_association" {
-  for_each = aws_subnet.charlie-prod_public_subnets
+  for_each       = aws_subnet.charlie-prod_public_subnets
   subnet_id      = each.value.id
   route_table_id = aws_route_table.charlie-prod_rt.id
+}
+
+resource "aws_security_group" "http" {
+  name = 
+  description = 
+  vpc_id = 
+  ingress  {
+    from_port = 
+    to_port = 
+    protocol  = 
+  }
+  ingress {
+    from_port = 
+    to_port = 
+    protocol  = 
+  }
+
 }

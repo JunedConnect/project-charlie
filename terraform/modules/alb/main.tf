@@ -1,13 +1,9 @@
-resource "aws_lb" "test" {
-  name               = "prod-alb"
-<<<<<<< HEAD
-=======
-  
->>>>>>> b24da69f245a976c97c627c7c2528c636931c35e
-  internal           = false
-  load_balancer_type = "application"
-  ip_address_type = "ipv4"
-  security_groups    = 
+resource "aws_lb" "charlie-lb" {
+  name               = var.alb_name
+  internal           = var.alb_internal
+  load_balancer_type = var.load_balancer_type
+  ip_address_type    = var.alb_ip_address_type
+  security_groups    = [] ## TODO
   subnets            = 
   enable_deletion_protection = true
   tags = {
@@ -15,15 +11,7 @@ resource "aws_lb" "test" {
   }
 }
 
-resource "aws_security_group" "alb-sg" {
-  
-}
-
-resource "aws_lb" "front_end" {
-  
-}
-
-resource "aws_lb" "front_end" {
+resource "aws_lb_listener" "name" {
   
 }
 
