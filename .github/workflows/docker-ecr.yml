@@ -1,0 +1,10 @@
+# name:  test
+# on:
+#   workflow_dispatch:
+# jobs:
+#   ecr:
+#     runs-on: ubuntu-latest 
+#     steps:
+#       - name: IAM credentials 
+#         uses:  
+
