@@ -1,5 +1,9 @@
 resource "aws_lb" "test" {
   name               = "prod-alb"
+<<<<<<< HEAD
+=======
+  
+>>>>>>> b24da69f245a976c97c627c7c2528c636931c35e
   internal           = false
   load_balancer_type = "application"
   ip_address_type = "ipv4"
