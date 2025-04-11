@@ -11,3 +11,12 @@ variable "team_name" {
 variable "public_subnets" {
   type = list(string)
 }
+
+variable "aws_security_group_name" {
+  type = string
+}
+
+variable "sg_ports" {
+  type = list(number)
+}
+
