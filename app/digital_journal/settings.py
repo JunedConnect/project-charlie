@@ -29,6 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = ['https://app.maajid.co.uk', 'http://app.maajid.co.uk']
 
 # Application definition
 
