@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-secret_data = get_aws_secret("django/production/secretkey")
+secret_data = get_aws_secret("django/production/key")
 SECRET_KEY = secret_data["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -31,7 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://app.maajid.co.uk', 'http://app.maajid.co.uk']
+CSRF_TRUSTED_ORIGINS = ['https://app.maajid.co.uk', 'http://app.maajid.co.uk', 'https://sehindemitech.co.uk', 'http://sehindemitech.co.uk']
 
 # Application definition
 
