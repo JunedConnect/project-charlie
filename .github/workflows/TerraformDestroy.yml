@@ -1,12 +1,12 @@
 name: Terraform Destroy
 
-on:
-  workflow_dispatch:
-
 # on:
-#     push:
-#         branches:
-#             - test
+#   workflow_dispatch:
+
+on:
+    push:
+        branches:
+            - aws-secretsmanager
 
 
 jobs:
