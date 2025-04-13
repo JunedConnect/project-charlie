@@ -73,12 +73,4 @@ jobs:
               run: terraform init
 
             - name: Terraform Apply
-              run: terraform plan
-#              run: terraform apply -auto-approve
-
-            - name: Confirm tfvars file exists
-              run: |
-                echo "Listing files in terraform/"
-                ls -l
-                echo "Showing contents of terraform.tfvars"
-                cat terraform.tfvars
+              run: terraform apply -auto-approve
