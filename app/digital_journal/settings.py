@@ -26,9 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 secret_data = get_aws_secret("django/production/key")
 SECRET_KEY = secret_data["DJANGO_SECRET_KEY"]
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = ['https://app.maajid.co.uk', 'http://app.maajid.co.uk', 'https://sehindemitech.co.uk', 'http://sehindemitech.co.uk', 'https://app.juned.co.uk', 'http://app.juned.co.uk']
@@ -169,3 +166,6 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+DEBUG = True
