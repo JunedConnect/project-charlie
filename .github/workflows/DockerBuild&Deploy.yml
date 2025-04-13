@@ -1,12 +1,12 @@
 name: Docker Build & Deploy
 
-on:
-  workflow_dispatch:
-
 # on:
-#     push:
-#         branches:
-#             - aws-secretsmanager
+#   workflow_dispatch:
+
+on:
+    push:
+        branches:
+            - aws-secretsmanager
 
 
 jobs:
@@ -44,7 +44,7 @@ jobs:
               run: |
                 docker build -t journal-app .
                 docker tag journal-app:latest ${{ secrets.AWS_REGISTRY }}/journal-app:latest
-                docker push ${{ secrets.AWS_REGISTRY }}/journal-app:latest
+#                docker push ${{ secrets.AWS_REGISTRY }}/journal-app:latest
 
             - name: Trivy Scan
               uses: aquasecurity/trivy-action@master
