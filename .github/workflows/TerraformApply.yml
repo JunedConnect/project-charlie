@@ -35,8 +35,8 @@ jobs:
                 aws s3 cp s3://terraform-state-ecs-project-charlie/terraform.tfvars .
 
 
-            - name: Checkout
-              uses: actions/checkout@v4
+            # - name: Checkout
+            #   uses: actions/checkout@v4
   
             - name: Setup Tflint
               uses: terraform-linters/setup-tflint@master
