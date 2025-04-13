@@ -1,0 +1,71 @@
+name: Terraform-plan-scan-apply
+on: 
+  # workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+env:
+  TF_WORKING_DIR: ./terraform
+
+# permissions:
+#       security-events: write 
+jobs:
+  terraform-plan-tflint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code checkout
+        uses: actions/checkout@v4
+
+      - name: Login to AWS
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEYS }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.REGION }}
+
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Set up tflint
+        uses: terraform-linters/setup-tflint@v1
+        with:
+          tflint_version: latest
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: TFLint
+        run: tflint
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Run tfsec (security scan)
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          working_directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Run checkov (compliance scan)
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Init
+        run: terraform init -backend=true
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Apply (auto-approve on main)
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve tfplan
+        working-directory: ${{ env.TF_WORKING_DIR }}
