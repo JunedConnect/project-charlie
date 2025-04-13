@@ -1,71 +1,87 @@
 # name: Terraform-plan-scan-apply
-# on: 
-#   # workflow_dispatch:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     branches:
-#       - main
-# env:
-#   TF_WORKING_DIR: ./terraform
+on: 
+  # workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+env:
+  TF_WORKING_DIR: ./terraform
 
-# # permissions:
-# #       security-events: write 
-# jobs:
-#   terraform-plan-tflint:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Get Code checkout
-#         uses: actions/checkout@v4
+# permissions:
+#       security-events: write 
+jobs:
+  terraform-plan-tflint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./terraform"
+    steps:
+      - name: Get Code checkout
+        uses: actions/checkout@v4
 
-#       - name: Login to AWS
-#         uses: aws-actions/configure-aws-credentials@v4.1.0
-#         with:
-#           aws-access-key-id: ${{ secrets.ACCESS_KEYS }}
-#           aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
-#           aws-region: ${{ secrets.REGION }}
+      - name: Login to AWS
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEYS }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.REGION }}
+
+      # - name: Downloading tfvars from S3 bucket
+      #   run: aws s3 cp s
+
+      - name: Setting up terraform 
+        uses: hashicorp/setup-terraform@v3
+
+      - name: terraform formating 
+        run: terraform fmt -check -recursive
+
+      - name: TFLint
+        run: tflint
+
+      - name: setting up tflint
+        uses: terraform-linters/setup-tflint@v1
+        with:
+          tflint_version: latest
+
+      - name: Run TFLint and output SARIF
+        run: |
+          tflint --recursive --format=sarif > tflint-results.sarif
+        continue-on-error: true
+
+      - name: Upload TFLint scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: tflint-results-terraform.sarif
+          wait-for-processing: true
+
+      - name: Run Checkov scan
+      uses: bridgecrewio/checkov-action@master
+      with:
+        framework: terraform
+        soft_fail: true
+        output_format: cli,sarif
+        output_file_path: checkov-results-terraform.sarif
 
 
-#       - name: Setting up terraform 
-#         uses: hashicorp/setup-terraform@v3
+      - name: Upload Checkov scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+            sarif_file: 'checkov-results-terraform.sarif'
+            wait-for-processing: true
 
-#       - name: tflint for terraform
-#         uses: terraform-linters/setup-tflint@v1
-#         with:
-#           tflint_version: latest
+      - name: Terraform Init
+        run: terraform init -backend=true
 
-#       - name: terraform formating 
-#         run: terraform fmt -check -recursive
-#         working-directory: ${{ env.TF_WORKING_DIR }}
+      - name: Terraform Validate
+        run: terraform validate
 
-#       - name: TFLint
-#         run: tflint
-#         working-directory: ${{ env.TF_WORKING_DIR }}
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
 
-#       - name: static code analysis tfsec 
-#         uses: aquasecurity/tfsec-action@v1.0.0
-#         with:
-#           working_directory: ${{ env.TF_WORKING_DIR }}
-
-#       - name: Run checkov (compliance scan)
-#         uses: bridgecrewio/checkov-action@master
-#         with:
-#           directory: ${{ env.TF_WORKING_DIR }}
-
-#       - name: Terraform Init
-#         run: terraform init -backend=true
-#         working-directory: ${{ env.TF_WORKING_DIR }}
-
-#       - name: Terraform Validate
-#         run: terraform validate
-#         working-directory: ${{ env.TF_WORKING_DIR }}
-
-#       - name: Terraform Plan
-#         run: terraform plan -out=tfplan
-#         working-directory: ${{ env.TF_WORKING_DIR }}
-
-#       - name: Terraform Apply (auto-approve on main)
-#         if: github.ref == 'refs/heads/main'
-#         run: terraform apply --auto-approve tfplan
-#         working-directory: ${{ env.TF_WORKING_DIR }}
+      - name: Terraform Apply 
+        run: terraform apply --auto-approve tfplan
