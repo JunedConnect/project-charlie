@@ -6,50 +6,72 @@ resource "aws_lb" "cluster-charlie-lb" {
   load_balancer_type         = var.load_balancer_type
   ip_address_type            = var.alb_ip_address_type
   security_groups            = var.security_groups
-  subnets                    = var.subnets
-  enable_deletion_protection = true
+  subnets                    = var.public_subnet_network_azs_list
   tags = {
     Environment = "cluster-charlie"
   }
 }
 
-# ### forward just in case we forward to https to https connection so secure connection from end user to our backend 
-# resource "aws_lb_listener" "cluster-charlie-listener-https-https" {
+# resource "aws_lb_listener" "cluster-charlie-listener-http-https" {
 #   depends_on = [ aws_lb.cluster-charlie-lb ]
 #   load_balancer_arn = aws_lb.cluster-charlie-lb.arn
-#   protocol = var.redirect_protocol_https
-#   port = var.listener_port
-#   # certificate_arn = #### need to create certificate for this to work asked juned
+#   protocol = var.listener_protocol_http
+#   port = var.listener_port_https
+  
 #   default_action {
-#     type = "forward"
-#     forward {
-#       target_group {
-#         arn = aws_lb_target_group.cluster-charlie-tg.arn
-#       }
+#     type = "redirect" 
+#     redirect {
+#       status_code = var.redirect_status_code
+#       protocol =  var.listener_protocol_https
+#       port = var.listener_port_https
 #     }
-#   }
 
+    
+#   }
 # }
 
-
-resource "aws_lb_listener" "cluster-charlie-listener-https-http" {
+resource "aws_lb_listener" "cluster-charlie-listener-https-https" {
   depends_on = [ aws_lb.cluster-charlie-lb ]
   load_balancer_arn = aws_lb.cluster-charlie-lb.arn
-  protocol = var.listener_protocol
-  port = var.listener_port
+  protocol = var.listener_protocol_https
+  port = var.listener_port_https
+  certificate_arn = var.aws_acm_certificate
   default_action {
-    type = "redirect"
-    redirect {
-      protocol = var.redirect_protocol_https
-      status_code = var.redirect_status_code
-      port = var.redirect_port
-    }
+    type = "forward"
+    target_group_arn = aws_lb_target_group.cluster_charlie_tg.arn
   }
 }
 
-resource "aws_lb_target_group" "test" {
+
+
+# variable "redirect_status_code" {
+#   default = "HTTP_301"
+# }
+resource "aws_lb_target_group" "cluster_charlie_tg" {
   name     = var.target_group_name
   port     = var.target_group_port
   protocol = var.target_group_protocol
   vpc_id   = var.vpc_id
+  target_type = var.target_type
 }
+
+
+
+# resource "aws_lb_listener" "cluster-charlie-listener-https" {
+#   depends_on = [ aws_lb.cluster-charlie-lb ]
+#   load_balancer_arn = aws_lb.cluster-charlie-lb.arn
+#   protocol = var.listener_protocol
+#   port = var.listener_port
+#   default_action {
+#     type = "forward"
+#     target_group_arn = aws_lb_target_group.cluster_charlie_tg.arn
+#   }
+# }
+
+# resource "aws_lb_target_group" "cluster_charlie_tg" {
+#   name     = var.target_group_name
+#   port     = var.target_group_port
+#   protocol = var.target_group_protocol
+#   vpc_id   = var.vpc_id
+#   target_type = var.target_type
+# }

@@ -1,0 +1,87 @@
+name: Terraform-plan-scan-apply
+on: 
+  # workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+env:
+  TF_WORKING_DIR: ./terraform
+
+# permissions:
+#       security-events: write 
+jobs:
+  terraform-plan-tflint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./terraform"
+    steps:
+      - name: Get Code checkout
+        uses: actions/checkout@v4
+
+      - name: Login to AWS
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEYS }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.REGION }}
+
+      # - name: Downloading tfvars from S3 bucket
+      #   run: aws s3 cp s
+
+      - name: Setting up terraform 
+        uses: hashicorp/setup-terraform@v3
+
+      - name: terraform formating 
+        run: terraform fmt -check -recursive
+
+      - name: TFLint
+        run: tflint
+
+      - name: setting up tflint
+        uses: terraform-linters/setup-tflint@v1
+        with:
+          tflint_version: latest
+
+      - name: Run TFLint and output SARIF
+        run: |
+          tflint --recursive --format=sarif > tflint-results.sarif
+        continue-on-error: true
+
+      - name: Upload TFLint scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: tflint-results-terraform.sarif
+          wait-for-processing: true
+
+      - name: Run Checkov scan
+      uses: bridgecrewio/checkov-action@master
+      with:
+        framework: terraform
+        soft_fail: true
+        output_format: cli,sarif
+        output_file_path: checkov-results-terraform.sarif
+
+
+      - name: Upload Checkov scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+            sarif_file: 'checkov-results-terraform.sarif'
+            wait-for-processing: true
+
+      - name: Terraform Init
+        run: terraform init -backend=true
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply 
+        run: terraform apply --auto-approve tfplan

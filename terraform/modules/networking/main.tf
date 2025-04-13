@@ -14,14 +14,25 @@ resource "aws_internet_gateway" "cluster-charlie-vpc-igw" {
   }
 }
 
-resource "aws_subnet" "cluster-charlie-public_subnets" {
-  for_each                = { for idx, cidr in var.public_subnets : idx => cidr }
+data "aws_availability_zones" "available_zones" {}
+
+resource "aws_subnet" "cluster-charlie-public_subnets_az1" {
   vpc_id                  = aws_vpc.cluster-charlie-vpc.id
-  cidr_block              = each.value
-  map_public_ip_on_launch = true
-  # availability_zone_id = ###Need to fill 
+  cidr_block              = var.public_subnet_cidr_1
+  map_public_ip_on_launch = false
+  availability_zone =  data.aws_availability_zones.available_zones.names[0]
   tags = {
-    "Name" = "cluster-charlie-${each.key}"
+    "Name" = "cluster-charlie-public-subnet-1"
+  }
+}
+
+resource "aws_subnet" "cluster-charlie-public_subnets_az2" {
+  vpc_id                  = aws_vpc.cluster-charlie-vpc.id
+  cidr_block              = var.public_subnet_cidr_2
+  map_public_ip_on_launch = true
+  availability_zone =  data.aws_availability_zones.available_zones.names[1]
+  tags = {
+    "Name" = "cluster-charlie-public-subnet-2"
   }
 }
 
@@ -33,9 +44,13 @@ resource "aws_route_table" "cluster-charlie-rt" {
   }
 }
 
-resource "aws_route_table_association" "cluster-charlie-rt_association" {
-  for_each       = aws_subnet.cluster-charlie-public_subnets
-  subnet_id      = each.value.id
+resource "aws_route_table_association" "cluster-charlie-rt_association-1" {
+  subnet_id = aws_subnet.cluster-charlie-public_subnets_az1.id
+  route_table_id = aws_route_table.cluster-charlie-rt.id
+}
+
+resource "aws_route_table_association" "cluster-charlie-rt_association-2" {
+  subnet_id = aws_subnet.cluster-charlie-public_subnets_az2.id
   route_table_id = aws_route_table.cluster-charlie-rt.id
 }
 
