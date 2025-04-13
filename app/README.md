@@ -53,7 +53,7 @@ $ coverage report
 Create html file with code coverage report:
 ```
 $ coverage html
-
+```
 
 ## Sources
 The packages used by this application are specified in `requirements.txt`
