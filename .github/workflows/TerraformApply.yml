@@ -1,12 +1,12 @@
 name: Terraform Apply
 
-# on:
-#   workflow_dispatch:
-
 on:
-    push:
-        branches:
-            - aws-secretsmanager
+  workflow_dispatch:
+
+# on:
+#     push:
+#         branches:
+#             - aws-secretsmanager
 
 
 jobs:
