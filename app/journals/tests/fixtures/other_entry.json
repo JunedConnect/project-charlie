@@ -1,0 +1,13 @@
+[
+    {
+      "model": "journals.entry",
+      "id": 4,
+      "fields":{
+        "entry_name": "First entry",
+        "journal": 2,
+        "responses": ["Test response", "Second response"],
+        "date": "2024-02-22"
+      }
+    }
+]
+  

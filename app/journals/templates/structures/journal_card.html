@@ -1,0 +1,20 @@
+{% extends "partials/journals_card_generation_iterator.html" %}
+{% block journal_card %}
+    <div class="col-md-3 mb-4">
+        <div class="card border-primary" style="background-color: rgba(245,245,245,0.6)">
+            <div class="card-body">
+                <h5 class="card-title">{{ journal.name }}</h5>
+            
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'view_journal_entries' journal.id%}" class="btn btn-info">View Journal</a>
+                    <a href="{% url 'download_journal_pdf' journal.id%}" class="btn btn-info">Download as PDF</a>                           
+                    <form action="{% url 'delete_journal' journal.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this journal?')">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

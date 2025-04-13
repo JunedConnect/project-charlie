@@ -1,0 +1,34 @@
+[
+    {
+      "model": "journals.user",
+      "pk": 0,
+      "fields": {
+        "first_name": "All",
+        "last_name": "All",
+        "username": "@all",
+        "email": "all@journalsapp.com",
+        "password": "DefaultUserAllPassword270224",
+        "is_active": true
+      }
+    },
+
+    {
+      "model": "journals.template",
+      "pk": 0,
+      "fields": {
+        "name": "Base Template",
+        "owner": 0,
+        "questions": ["Question 1", "Question 2", "Question 3"]
+      }
+    },
+
+    {
+      "model": "journals.template",
+      "pk": 1,
+      "fields": {
+        "name": "Custom Template",
+        "owner": 0,
+        "questions": []
+      }
+    }
+  ]

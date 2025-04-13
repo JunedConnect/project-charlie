@@ -1,0 +1,17 @@
+{% extends 'structures/half_row_card.html' %}
+{% block card_content %}
+    <h3 class="m-0 mb-3">Theres still time to edit these entries: </h3>
+    {% if user.get_user_today_entries|length == 0 %}
+        <div class="text-center mt-5"><p class="lead display-5">You have no entries that you can still edit</p></div>
+    {% else %}
+        {% for entry in user.get_user_today_entries %}
+            <tr>
+            <td class="py-2">
+                <h4 class="fw-normal">
+                {{ entry.journal.name }}: <a href='{% url 'edit_entry' entry.journal.id entry.id %}' class="text-decoration-none text-blue"> {{ entry.entry_name }}</a>
+                </h4>
+            </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

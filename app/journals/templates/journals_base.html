@@ -1,0 +1,16 @@
+{% extends "base_content.html" %}
+<div class="container-fluid" style="height:100vh;">
+{% block content %}
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="cover-card-title h1">My Journals ({{ journal_list|length }})</div>
+            <a href="{% url 'create_journal' %}" class="btn btn-primary btn-lg">Create Journal</a>
+            
+        </div>
+        {% block create_journal_block %}
+        {% endblock %}
+        {% include 'structures/detailed_journal_card.html' with journal_list=journal_list no_journals_message="No Journals Found" %}
+
+    </div>
+{% endblock %}
+</div>

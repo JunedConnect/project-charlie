@@ -1,0 +1,34 @@
+[
+    {
+      "model": "journals.entry",
+      "id": 1,
+      "fields":{
+        "entry_name": "First entry",
+        "journal": 1,
+        "responses": ["Test response", "Second response"],
+        "date": "2024-02-22"
+      }
+    },
+    {
+        "model": "journals.entry",
+        "id": 2,
+        "fields":{
+          "entry_name": "Second Entry",
+          "journal": 1,
+          "responses": ["response B", "response A"],
+          "date": "2024-01-20"
+        }
+    },
+    {
+      "model": "journals.entry",
+      "id": 3,
+      "fields":{
+        "entry_name": "First entry",
+        "journal": 2,
+        "responses": ["Test response", "Second response"],
+        "date": "2024-02-22"
+      }
+    }
+
+]
+  

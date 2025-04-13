@@ -1,0 +1,47 @@
+<div class="mt-5">
+    <h2>Leaderboard</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">User</th>
+                <th scope="col">Level</th>
+                <th scope="col">Accolade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user_profile in top_users %}
+                <tr {% if user_profile.user == user %}style="font-weight: bold;"{% endif %}>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ user_profile.user.username }}</td>
+                    <td>{{ user_profile.level }}</td>
+                    <td>
+                      {% with user_profile.highest_achievement as achievement %}
+                          {% if achievement %}
+                              {{ achievement.name }}
+                          {% else %}
+                              None
+                          {% endif %}
+                      {% endwith %}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% if not in_top_users %}
+                <tr style="font-weight: bold;">
+                    <th scope="row">{{ current_user_rank }}</th>
+                    <td>{{ user.username }}</td>
+                    <td>{{ profile.level }}</td>
+                    <td>
+                      {% with profile.highest_achievement as achievement %}
+                          {% if achievement %}
+                              {{ achievement.name }}
+                          {% else %}
+                              None
+                          {% endif %}
+                      {% endwith %}
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>

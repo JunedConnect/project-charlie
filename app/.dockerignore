@@ -1,0 +1,12 @@
+# Ignore following files
+.git
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.log
+.env
+
+# Prevents local accounts going into the build
+*.db
+*.sqlite3

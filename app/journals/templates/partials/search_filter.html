@@ -1,0 +1,22 @@
+{% load widget_tweaks %}
+<div class="d-flex justify-content-between align-items-center">
+  {% csrf_token %}
+  <div class="col">
+    <input type="hidden" name="next" value="{{ next }}">
+  </div>
+  {% for field in form %}
+  
+    <div class="col-3">
+      {{ field.label_tag }}
+    </div>
+  
+    <div class="col-6">
+        {% render_field field class="form-control" %}
+    </div>
+  {% endfor %}
+
+  <div class="col-3">
+    <input type="submit" value="Filter" class="btn btn-primary">
+  </div>
+</div>
+

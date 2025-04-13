@@ -1,0 +1,37 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<div class="container">
+  <div class="row mb-1">
+    <div class="col-12">
+      <h1>Welcome to your dashboard, {{ user.username }}</h1>
+      <div class="card border-primary p-3" style="background-color: rgba(245,245,245,0.6); border-width: 3px;">
+        <h3>Recently Accessed Journals:</h3>
+        {% include 'structures/detailed_journal_card.html' with journal_list=journal_list no_journals_message='No recently accessed journals' %}
+      </div>
+    </div>
+  </div>
+  <div class="row mb-1 align-items-start equal-height-row d-flex flex-wrap" >
+    {% include 'partials/journals_without_today_entry_card.html' with user=user %}
+    {% include 'partials/entries_that_can_still_be_edited.html' with user=user %}
+
+
+  </div>
+  <div class="row mb-1">
+    <div class="col-12">
+      <div class="card border-primary p-3" style="background-color: rgba(245,245,245,0.6); border-width: 3px;">
+        {% include "partials/user_level.html" with level=level current_experience=current_experience experience_needed=experience_needed progress_to_next_level=progress_to_next_level %}
+          
+        {% include "partials/achievements.html" with achievement=achievement%}
+      </div>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-12">
+      <div class="card border-primary p-3" style="background-color: rgba(245,245,245,0.6); border-width: 3px;">
+        {% include 'partials/leaderboard.html' with top_users=top_users %}
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-6 offset-md-3">
+        <h1>Custom Template</h1>
+        <form action="{% url 'custom_template' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ next }}">
+          {% include 'partials/bootstrap_form.html' with form=form %}
+          <input type="submit" value="Create Template" class="btn btn-primary">
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
