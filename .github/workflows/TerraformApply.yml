@@ -1,12 +1,12 @@
 name: Terraform Apply
 
-# on:
-#   workflow_dispatch:
-
 on:
-    push:
-        branches:
-            - aws-secretsmanager
+  workflow_dispatch:
+
+# on:
+#     push:
+#         branches:
+#             - aws-secretsmanager
 
 
 jobs:
@@ -33,10 +33,6 @@ jobs:
             - name: Download terraform.tfvars from S3 Bucket
               run: |
                 aws s3 cp s3://terraform-state-ecs-project-charlie/terraform.tfvars .
-
-
-            # - name: Checkout
-            #   uses: actions/checkout@v4
   
             - name: Setup Tflint
               uses: terraform-linters/setup-tflint@master
