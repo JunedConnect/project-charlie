@@ -27,15 +27,15 @@ jobs:
           aws-region: ${{ secrets.REGION }}
 
 
-      - name: Set up Terraform
+      - name: Setting up terraform 
         uses: hashicorp/setup-terraform@v3
 
-      - name: Set up tflint
+      - name: tflint for terraform
         uses: terraform-linters/setup-tflint@v1
         with:
           tflint_version: latest
 
-      - name: Terraform Format Check
+      - name: terraform formating 
         run: terraform fmt -check -recursive
         working-directory: ${{ env.TF_WORKING_DIR }}
 
@@ -43,7 +43,7 @@ jobs:
         run: tflint
         working-directory: ${{ env.TF_WORKING_DIR }}
 
-      - name: Run tfsec (security scan)
+      - name: static code analysis tfsec 
         uses: aquasecurity/tfsec-action@v1.0.0
         with:
           working_directory: ${{ env.TF_WORKING_DIR }}
@@ -67,5 +67,5 @@ jobs:
 
       - name: Terraform Apply (auto-approve on main)
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply --auto-approve tfplan
         working-directory: ${{ env.TF_WORKING_DIR }}
