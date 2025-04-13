@@ -32,7 +32,8 @@ jobs:
 
             - name: Download terraform.tfvars from S3 Bucket
               run: |
-                aws s3 cp s3://terraform-state-ecs-project-charlie/terraform.tfvars ./terraform/
+                aws s3 cp s3://terraform-state-ecs-project-charlie/terraform.tfvars .
+
 
             - name: Checkout
               uses: actions/checkout@v4
