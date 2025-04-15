@@ -122,11 +122,11 @@ The deployment process is fully automated via GitHub Actions:
     - Runs **TFLint** to validate Terraform syntax and best practices.
     - Runs **Checkov** to scan for security issues within Terraform code.
     
-2. **Terraform Apply** (`TerraformApply.yml`):
+3. **Terraform Apply** (`TerraformApply.yml`):
     - Initialises the Terraform directory.
     - Provisions the necessary AWS resources (ECS, ALB, Route 53, VPC, Security Groups).
     
-3. **Terraform Destroy** (`TerraformDestroy.yml`):
+4. **Terraform Destroy** (`TerraformDestroy.yml`):
     - Destroys all Terraform-managed resources when necessary.
 
 <br>
