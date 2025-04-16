@@ -1,12 +1,12 @@
-# Journal App Deployment
+# Journaliser App Deployment
 
-This project automates the deployment of the **Journal App** using **AWS**, **Terraform**, **Docker**, and **CI/CD pipelines**. Originally set up manually using **AWS Console**, the process has been automated to provide a secure, scalable, and streamlined deployment.
+This project automates the deployment of the **Journaliser App** using **AWS**, **Terraform**, **Docker**, and **CI/CD pipelines**. Originally set up manually using **AWS Console**, the process has been automated to provide a secure, scalable, and streamlined deployment.
 
 <br>
 
 ## Overview
 
-The **Journal App** is a containerised Django application deployed on **AWS ECS Fargate**. The deployment process is fully automated using **CI/CD pipeline** to handle Docker image building, security scans, and deployment to AWS through **Terraform**.
+The **Journaliser App** is a containerised Django application deployed on **AWS ECS Fargate**. The deployment process is fully automated using **CI/CD pipeline** to handle Docker image building, security scans, and deployment to AWS through **Terraform**.
 
 <br>
 
