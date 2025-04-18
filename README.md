@@ -116,7 +116,7 @@ The deployment process is fully automated via GitHub Actions:
     - Runs **Trivy** to scan for critical vulnerabilities before pushing to ECR.
     - Pushes the image to **Amazon ECR**.
 
-2. **Terraform Build** (`TerraformBuild.yml`):
+2. **Terraform Plan** (`TerraformPlan.yml`):
     - Initialises the Terraform directory.
     - Previews the necessary AWS resources (ECS, ALB, Route 53, VPC, Security Groups).
     - Runs **TFLint** to validate Terraform syntax and best practices.
