@@ -16,8 +16,6 @@ jobs:
             run:
                 working-directory: "./terraform/"
         environment: aws
-        permissions:
-          security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
     
         steps:
             - name: Checkout
