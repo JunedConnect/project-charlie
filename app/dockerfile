@@ -8,10 +8,16 @@ RUN pip install --upgrade pip && pip install --prefix=/install --no-cache-dir -r
 
 FROM python:3.8-slim
 
+RUN useradd dockeruser
+
 WORKDIR /app
 
 COPY --from=builder /install /usr/local
 
 COPY . .
+
+RUN chown -R dockeruser .
+
+USER appuser
 
 CMD ["sh", "-c", "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py startserver 0.0.0.0:5000"]
