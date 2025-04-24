@@ -1,3 +1,5 @@
+# Stage 1
+
 FROM python:3.8-slim AS builder
 
 WORKDIR /install
@@ -6,6 +8,9 @@ COPY requirements.txt .
 
 RUN pip install --upgrade pip && pip install --prefix=/install --no-cache-dir -r requirements.txt
 
+
+# Stage 2
+
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -13,5 +18,11 @@ WORKDIR /app
 COPY --from=builder /install /usr/local
 
 COPY . .
+
+RUN useradd dockeruser
+
+RUN chown -R dockeruser .
+
+USER dockeruser
 
 CMD ["sh", "-c", "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py startserver 0.0.0.0:5000"]

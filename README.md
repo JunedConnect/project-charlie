@@ -1,13 +1,14 @@
-# Journal App Deployment
+# Journaliser App Deployment
 
-This project automates the deployment of the **Journal App** using **AWS**, **Terraform**, **Docker**, and **CI/CD pipelines**. Originally set up manually using **AWS Console**, the process has been automated to provide a secure, scalable, and streamlined deployment.
+This project automates the deployment of the **Journaliser App** using **AWS**, **Terraform**, **Docker**, and **CI/CD pipelines**. Originally set up manually using **AWS Console**, the process has been automated to provide a secure, scalable, and streamlined deployment.
 
 <br>
 
 ## Overview
 
-The **Journal App** is a containerised Django application deployed on **AWS ECS Fargate**. The deployment process is fully automated using **CI/CD pipeline** to handle Docker image building, security scans, and deployment to AWS through **Terraform**.
+The **Journaliser App** is a containerised Django application deployed on **AWS ECS Fargate**. The deployment process is fully automated using **CI/CD pipeline** to handle Docker image building, security scans, and deployment to AWS through **Terraform**.
 
+<br>
 
 ## Architecture Diagram
 
@@ -42,7 +43,7 @@ The **Journal App** is a containerised Django application deployed on **AWS ECS 
 ./
 ├── app
 │   └── Dockerfile
-├── Terraform
+├── terraform
 │   ├── modules
 │   │   ├── alb
 │   │   ├── ecs
@@ -54,14 +55,15 @@ The **Journal App** is a containerised Django application deployed on **AWS ECS 
 └── .github
     └── workflows
         ├── DockerBuild&Deploy.yml
+        ├── TerraformBuild.yml
         ├── TerraformApply.yml
         └── TerraformDestroy.yml
 ```
 
-- **Docker Files**:
+- **Docker Files** (`app/`):
     - **Dockerfile**: Defines the app's containerised environment.
 
-- **Terraform Files**:
+- **Terraform Files** (`terraform/`):
     - **modules/alb**: Sets up the **Application Load Balancer** (ALB).
     - **modules/ecs**: Configures the **ECS Cluster** and **Fargate service**.
     - **modules/network**: Provisions **Security Groups**, **VPC**, and **Subnets**.
@@ -75,23 +77,33 @@ The **Journal App** is a containerised Django application deployed on **AWS ECS 
         - Builds and pushes the Docker image to **ECR**.
         - Runs **Trivy** to scan the image for vulnerabilities.
     
-    - **TerraformApply.yml**:
-        - Applies the Terraform configuration to provision AWS resources.
+    - **TerraformPlan.yml**:
+        - Previews the Terraform configuration to provision AWS resources.
         - Runs **TFLint** and **Checkov** for security and syntax checks.
     
-    - **TerraformDestroy.yml**: Destroys Terraform-managed infrastructure.
+    - **TerraformApply.yml**:
+        - Applies the Terraform configuration to provision AWS resources.
+    
+    - **TerraformDestroy.yml**:
+        - Destroys Terraform-managed infrastructure.
 
 <br>
 
-## How to Set Up AWS Secrets Manager
+## Prerequisites
 
-This secret must be created manually in Secrets Manager prior to deploying the Django application. During deployment, the Django app retrieves this secret, which it then uses for the entire duration that the application remains active.
+### 1. AWS Secrets Manager Setup
+
+Before deploying the Django application, you must manually create a secret in AWS Secrets Manager. The Django app will automatically retrieve this secret during deployment and use it for the entire duration the application is active.
 
 Please use the following values for when you set up your secret:
-- Secret Name: django/production/key
-- Secret's Key: DJANGO_SECRET_KEY
-- Secret's Value: <place any value here>
 
+- **Secret Name:** `django/production/key`
+- **Secret Key:** `DJANGO_SECRET_KEY`
+- **Secret Value:** `<place any value here>`
+
+### 2. Whitelisting Your Domain
+
+To allow users to access the application via your domain, add your domain to the `CSRF_TRUSTED_ORIGINS` section within `app/digital_journal/settings.py`.
 
 <br>
 
@@ -103,14 +115,18 @@ The deployment process is fully automated via GitHub Actions:
     - Builds the Docker image.
     - Runs **Trivy** to scan for critical vulnerabilities before pushing to ECR.
     - Pushes the image to **Amazon ECR**.
-    
-2. **Terraform Apply** (`TerraformApply.yml`):
-    - Initialises and applies the Terraform configuration.
-    - Provisions the necessary AWS resources (ECS, ALB, Route 53, VPC, Security Groups).
+
+2. **Terraform Plan** (`TerraformPlan.yml`):
+    - Initialises the Terraform directory.
+    - Previews the necessary AWS resources (ECS, ALB, Route 53, VPC, Security Groups).
     - Runs **TFLint** to validate Terraform syntax and best practices.
-    - Runs **Checkov** to scan for security issues in Terraform code.
+    - Runs **Checkov** to scan for security issues within Terraform code.
     
-3. **Terraform Destroy** (`TerraformDestroy.yml`):
+3. **Terraform Apply** (`TerraformApply.yml`):
+    - Initialises the Terraform directory.
+    - Provisions the necessary AWS resources (ECS, ALB, Route 53, VPC, Security Groups).
+    
+4. **Terraform Destroy** (`TerraformDestroy.yml`):
     - Destroys all Terraform-managed resources when necessary.
 
 <br>
