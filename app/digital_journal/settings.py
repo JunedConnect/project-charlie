@@ -28,7 +28,7 @@ SECRET_KEY = secret_data["DJANGO_SECRET_KEY"]
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 # Allow Access
@@ -168,6 +168,8 @@ PATH_TO_TEMPLATES_JSON = "journals/templates.json"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Sets directory media
 # Sets directory path to BASE_DIR + media

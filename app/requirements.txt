@@ -17,3 +17,4 @@ certifi==2024.2.2
 kombu==5.3.5
 reportlab==3.6.2
 boto3
+gunicorn
