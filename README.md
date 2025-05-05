@@ -1,6 +1,6 @@
-# Journaliser
+# Journaliser ECS
 
-This project automates the deployment of the **Journaliser App** using **AWS**, **Terraform**, **Docker**, and **CI/CD pipelines**. Originally set up manually using **AWS Console**, the process has been automated to provide a secure, scalable, and streamlined deployment.
+This project automates the deployment of the **Journaliser App** using **AWS ECS**, **Terraform**, **Docker**, and **CI/CD pipelines**. Originally set up manually using **AWS Console**, the process has been automated to provide a secure, scalable, and streamlined deployment.
 
 <br>
 
